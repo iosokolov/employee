@@ -5,6 +5,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
+import settings
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -24,6 +26,15 @@ target_metadata = None
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+
+def format_db_url():
+    user = settings.POSTGRES_USER
+    password = settings.POSTGRES_PASSWORD
+    server = settings.POSTGRES_HOST
+    db = settings.POSTGRES_DB
+    port = settings.POSTGRES_PORT
+    return f"postgresql://{user}:{password}@{server}:{port}/{db}"
 
 
 def run_migrations_offline() -> None:
@@ -58,14 +69,15 @@ def run_migrations_online() -> None:
 
     """
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        url=format_db_url()
     )
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata, compare_server_default=True,
         )
 
         with context.begin_transaction():

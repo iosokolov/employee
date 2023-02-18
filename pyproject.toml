@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 alembic = "^1.9.4"
+python-dotenv = "^0.21.1"
+envparse = "^0.2.0"
 
 
 [build-system]
