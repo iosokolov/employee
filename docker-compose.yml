@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    container_name: employee_db
+    restart: unless-stopped
+    ports:
+      - '5566:5432'
+    environment:
+      - POSTGRES_USER=employee
+      - POSTGRES_PASSWORD=employee
+      - POSTGRES_DB=employee
+      - POSTGRES_HOST=localhost
