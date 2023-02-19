@@ -1,12 +1,11 @@
-from aiohttp import web
+import aiohttp.web
 
 from db import async_session
 from db_selectors import select_person_recursive
 
 
-async def get_structure(request):
-    ...
-    # async with Session() as session
-    #     return web.Response(text="Hello, world")
+async def get_employee_structure(request):
     async with async_session() as session:
-        return select_person_recursive(session)
+        res = await select_person_recursive(session)
+
+    return aiohttp.web.json_response(res)
